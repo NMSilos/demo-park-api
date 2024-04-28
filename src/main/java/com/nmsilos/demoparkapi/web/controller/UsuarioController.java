@@ -8,6 +8,7 @@ import com.nmsilos.demoparkapi.web.dto.UsuarioSenhaDto;
 import com.nmsilos.demoparkapi.web.dto.mapper.UsuarioMapper;
 import com.nmsilos.demoparkapi.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,6 +73,12 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Listar usuários", description = "Lista todos os usuários cadastrados",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Usuários retornados com sucesso",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = UsuarioResponseDto.class))))
+            })
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> getAll() {
         List<Usuario> users = usuarioService.buscarTodos();
