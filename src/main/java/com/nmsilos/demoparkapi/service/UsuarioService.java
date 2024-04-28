@@ -1,9 +1,11 @@
 package com.nmsilos.demoparkapi.service;
 
 import com.nmsilos.demoparkapi.entity.Usuario;
+import com.nmsilos.demoparkapi.exception.UsernameUniqueViolationException;
 import com.nmsilos.demoparkapi.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +18,12 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw new UsernameUniqueViolationException(String.format("Username {%s} já cadastrado", usuario.getUsername()));
+        }
     }
 
     @Transactional
