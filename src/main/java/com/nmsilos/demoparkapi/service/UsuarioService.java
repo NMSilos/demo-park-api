@@ -2,6 +2,7 @@ package com.nmsilos.demoparkapi.service;
 
 import com.nmsilos.demoparkapi.entity.Usuario;
 import com.nmsilos.demoparkapi.exception.EntityNotFoundException;
+import com.nmsilos.demoparkapi.exception.PasswordInvalidException;
 import com.nmsilos.demoparkapi.exception.UsernameUniqueViolationException;
 import com.nmsilos.demoparkapi.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -36,11 +37,11 @@ public class UsuarioService {
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
         if (!novaSenha.equals(confirmaSenha)) {
-            throw new RuntimeException("Nova senha não confere com confirmação de senha.");
+            throw new PasswordInvalidException("Nova senha não confere com a confirmação da senha");
         }
         Usuario user = buscarPorId(id);
         if (!user.getPassword().equals(senhaAtual)) {
-            throw new RuntimeException("Sua senha não confere.");
+            throw new PasswordInvalidException("Sua senha não confere");
         }
         user.setPassword(novaSenha);
         return user;
