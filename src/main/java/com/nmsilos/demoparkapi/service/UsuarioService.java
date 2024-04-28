@@ -1,6 +1,7 @@
 package com.nmsilos.demoparkapi.service;
 
 import com.nmsilos.demoparkapi.entity.Usuario;
+import com.nmsilos.demoparkapi.exception.EntityNotFoundException;
 import com.nmsilos.demoparkapi.exception.UsernameUniqueViolationException;
 import com.nmsilos.demoparkapi.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,7 @@ public class UsuarioService {
     @Transactional
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não encontrado"));
+                () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado", id)));
     }
 
     @Transactional
