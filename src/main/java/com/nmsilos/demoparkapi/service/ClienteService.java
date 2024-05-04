@@ -1,6 +1,7 @@
 package com.nmsilos.demoparkapi.service;
 
 import com.nmsilos.demoparkapi.entity.Cliente;
+import com.nmsilos.demoparkapi.exception.EntityNotFoundException;
 import com.nmsilos.demoparkapi.repository.ClienteRepository;
 import com.nmsilos.demoparkapi.web.exception.CpfUniqueViolationException;
 import jakarta.transaction.Transactional;
@@ -26,4 +27,10 @@ public class ClienteService {
         }
     }
 
+    @Transactional
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))
+        );
+    }
 }
