@@ -1,11 +1,14 @@
 package com.nmsilos.demoparkapi.web.controller;
 import com.nmsilos.demoparkapi.entity.Cliente;
 import com.nmsilos.demoparkapi.jwt.JwtUserDetails;
+import com.nmsilos.demoparkapi.repository.projection.ClienteProjection;
 import com.nmsilos.demoparkapi.service.ClienteService;
 import com.nmsilos.demoparkapi.service.UsuarioService;
 import com.nmsilos.demoparkapi.web.dto.ClienteCreateDto;
 import com.nmsilos.demoparkapi.web.dto.ClienteResponseDto;
+import com.nmsilos.demoparkapi.web.dto.PageableDto;
 import com.nmsilos.demoparkapi.web.dto.mapper.ClienteMapper;
+import com.nmsilos.demoparkapi.web.dto.mapper.PageableMapper;
 import com.nmsilos.demoparkapi.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,10 +17,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Clientes", description = "Contém todas as operações relativas ao recurso de um cliente")
 @RequiredArgsConstructor
@@ -65,6 +72,13 @@ public class ClienteController {
     public ResponseEntity<ClienteResponseDto> getbyId(@PathVariable Long id) {
         Cliente cliente = clienteService.buscarPorId(id);
         return ResponseEntity.ok(ClienteMapper.toDto(cliente));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PageableDto> getAll(Pageable pageable) {
+        Page<ClienteProjection> clientes = clienteService.buscarTodos(pageable);
+        return ResponseEntity.ok(PageableMapper.toDto(clientes));
     }
 
 }
