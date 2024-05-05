@@ -48,7 +48,9 @@ public class Vaga implements Serializable {
     @Column(name = "modificado_por")
     private String modificadoPor;
 
-    private enum StatusVaga {}
+    private enum StatusVaga {
+        LIVRE, OCUPADA;
+    }
 
     @Override
     public boolean equals(Object o) {
