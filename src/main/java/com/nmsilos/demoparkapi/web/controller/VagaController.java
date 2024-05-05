@@ -33,7 +33,7 @@ public class VagaController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping
+    @GetMapping("/{codigo}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VagaResponseDto> getByCodigo(@PathVariable String codigo) {
         Vaga vaga = vagaService.buscarPorCodigo(codigo);
