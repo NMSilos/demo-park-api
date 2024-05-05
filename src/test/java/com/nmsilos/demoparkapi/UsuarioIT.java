@@ -1,5 +1,6 @@
 package com.nmsilos.demoparkapi;
 
+import com.nmsilos.demoparkapi.web.dto.ClienteResponseDto;
 import com.nmsilos.demoparkapi.web.dto.UsuarioCreateDto;
 import com.nmsilos.demoparkapi.web.dto.UsuarioResponseDto;
 import com.nmsilos.demoparkapi.web.dto.UsuarioSenhaDto;
