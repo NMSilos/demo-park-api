@@ -2,7 +2,6 @@ package com.nmsilos.demoparkapi.web.controller;
 
 import com.nmsilos.demoparkapi.entity.Vaga;
 import com.nmsilos.demoparkapi.service.VagaService;
-import com.nmsilos.demoparkapi.web.dto.UsuarioResponseDto;
 import com.nmsilos.demoparkapi.web.dto.VagaCreateDto;
 import com.nmsilos.demoparkapi.web.dto.VagaResponseDto;
 import com.nmsilos.demoparkapi.web.dto.mapper.VagaMapper;
@@ -38,7 +37,9 @@ public class VagaController {
                     @ApiResponse(responseCode = "409", description = "Vaga já cadastrada",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = VagaResponseDto.class))),
                     @ApiResponse(responseCode = "422", description = "Recurso não processado por falta de dados ou dados inválidos",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Recurso não permito ao perfil de CLIENTE",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -52,6 +53,21 @@ public class VagaController {
         return ResponseEntity.created(location).build();
     }
 
+    @Operation(summary = "Localizar uma vaga", description = "Recurso para retornar uma vaga pelo seu código" +
+            "Requisição exige uso de um bearer token. Acesso restrito a Role='ADMIN'",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = VagaResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Vaga não localizada",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Recurso não permito ao perfil de CLIENTE",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            })
     @GetMapping("/{codigo}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VagaResponseDto> getByCodigo(@PathVariable String codigo) {
