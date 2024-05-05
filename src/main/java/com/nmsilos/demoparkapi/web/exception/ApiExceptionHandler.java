@@ -1,5 +1,6 @@
 package com.nmsilos.demoparkapi.web.exception;
 
+import com.nmsilos.demoparkapi.exception.CodigoUniqueViolationException;
 import com.nmsilos.demoparkapi.exception.EntityNotFoundException;
 import com.nmsilos.demoparkapi.exception.PasswordInvalidException;
 import com.nmsilos.demoparkapi.exception.UsernameUniqueViolationException;
@@ -25,7 +26,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Campo(s) invalido(s)", result));
     }
 
-    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class, CodigoUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request) {
         log.error("Api Error - ", ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.APPLICATION_JSON)
