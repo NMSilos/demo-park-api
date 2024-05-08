@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class EstacionamentoClienteDto {
+public class EstacionamentoCreateDto {
 
     @NotBlank
     @Size(min = 8, max = 8)
